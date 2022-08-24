@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getPosts } from '../api';
-import {Home} from '../pages';
+import {Home,Login} from '../pages';
 import {Loader,NavBar} from './';
+import { Routes, Route } from 'react-router-dom';
 function App() {
   const [posts,setPosts] = useState([]); 
   const [loading,setLoading] = useState(true); 
@@ -25,7 +26,10 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Home posts={posts} />
+      <Routes>
+        <Route path='/' element = {<Home posts={posts} />} />
+        <Route path='/login' element = {<Login  />} />
+      </Routes>
     </div>
   );
 }
