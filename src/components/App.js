@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getPosts } from '../api';
 import {Home} from '../pages';
-import {Loader} from './';
+import {Loader,NavBar} from './';
 function App() {
   const [posts,setPosts] = useState([]); 
   const [loading,setLoading] = useState(true); 
@@ -24,6 +24,7 @@ function App() {
 
   return (
     <div className="App">
+      <NavBar />
       <Home posts={posts} />
     </div>
   );
