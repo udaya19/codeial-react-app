@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import styles from '../styles/navbar.module.css'
+import { useAuth } from '../hooks/index';
+
 const NavBar = () =>{
+    const auth = useAuth()
     return (
         <div className={styles.nav}>
             <div className={styles.leftDiv}>
@@ -9,24 +12,32 @@ const NavBar = () =>{
                 </Link>
             </div>
             <div className={styles.rightNav}>
-                <div className={styles.user}>
+                {auth.user && <div className={styles.user}>
                     <a href='/'>
                         <img alt='user' src='https://cdn-icons-png.flaticon.com/512/747/747376.png' className={styles.userDp} />
                     </a>
-                    <span>Uday</span>
-                </div>
+                    <span> {auth.user.name} </span>
+                </div>}
                 <div className={styles.navLinks} >
                     <ul>
-                        <li>
-                            {/* <a href='/'>Login</a> */}
-                            <Link to= '/login'>Login</Link>
-                        </li>
-                        <li>
-                            <a href='/'>Logout</a>
-                        </li>
-                        <li>
-                            <a href='/'>Register</a>
-                        </li>
+                        {auth.user?(
+                            <>
+                                <li>
+                                    <button onClick={auth.logout} >Logout</button>
+                                </li>
+                            </>
+                        ):(
+                            <>
+                                <li>
+                                    <Link to= '/login'>Login</Link>
+                                </li>
+                        
+                                <li>
+                                    <a href='/'>Register</a>
+                                </li>
+                            </>
+                        )}
+                        
                     </ul>
                 </div>
             </div>
