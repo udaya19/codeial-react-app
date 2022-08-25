@@ -2,6 +2,7 @@ import {Home,Login} from '../pages';
 import {Loader,NavBar} from './';
 import { Routes, Route } from 'react-router-dom';
 import { useAuth } from '../hooks/index';
+import { SignUp } from '../pages/SignUp';
 function App() {
   
  
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path='/' element = {<Home />} />
         <Route path='/login' element = {<Login  />} />
+        <Route path='/register' element = {<SignUp />} />
       </Routes>
     </div>
   );
