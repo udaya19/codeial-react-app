@@ -1,10 +1,32 @@
 import styles from '../styles/home.module.css';
 import PropTypes from 'prop-types';
 import { Comments } from '../components';
-const Home = (props) =>{
+import { useState , useEffect} from 'react';
+import { getPosts } from '../api';
+import {Loader} from '../components';
+const Home = () =>{
+    const [posts,setPosts] = useState([]); 
+  const [loading,setLoading] = useState(true); 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await getPosts();
+
+      if (response.success) {
+        setPosts(response.data.posts);
+      }
+
+      setLoading(false);
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
     return (
         <div className={styles.postsList}>
-            {props.posts.map((post)=>(
+            {posts.map((post)=>(
                 <div className={styles.postWrapper} key={`post=${post._id}`} >
                 <div className={styles.postHeader}>
                   <div className={styles.postAvatar}>

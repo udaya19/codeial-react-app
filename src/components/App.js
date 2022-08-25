@@ -3,23 +3,13 @@ import { getPosts } from '../api';
 import {Home,Login} from '../pages';
 import {Loader,NavBar} from './';
 import { Routes, Route } from 'react-router-dom';
+import { useAuth } from '../hooks/index';
 function App() {
-  const [posts,setPosts] = useState([]); 
-  const [loading,setLoading] = useState(true); 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await getPosts();
-      console.log('response', response);
-      if(response.success){
-        setPosts(response.data.posts);
-      }
-      setLoading(false);
-    };
+  
+ 
+  const auth = useAuth();
 
-    fetchPosts();
-  }, []);
-
-  if(loading){
+  if(auth.loading){
     return <Loader />
   }
 
@@ -27,7 +17,7 @@ function App() {
     <div className="App">
       <NavBar />
       <Routes>
-        <Route path='/' element = {<Home posts={posts} />} />
+        <Route path='/' element = {<Home />} />
         <Route path='/login' element = {<Login  />} />
       </Routes>
     </div>
