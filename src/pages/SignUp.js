@@ -55,6 +55,9 @@ export const SignUp = ()=>{
       
           setSigningUp(false);
     }
+    if(auth.user){
+      navigate('/');
+    }
     return (
         <form className={styles.loginForm} onSubmit={handleFormSubmit}>
         <span className={styles.loginSignupHeader}> Signup</span>
