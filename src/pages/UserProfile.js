@@ -1,9 +1,50 @@
 import styles from '../styles/settings.module.css'
-// import { useAuth } from '../hooks/index';
-// import { useState } from 'react';
-// import { useToasts } from 'react-toast-notifications';
+// import { useLocation } from 'react-router-dom';
+import { useAuth } from '../hooks/index';
+import { useState, useEffect } from 'react';
+import { useParams,useNavigate } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
+import { fetchUserProfile } from '../api/index';
+import { Loader } from '../components';
 const UserProfile = () => {
-    const user = {};
+    const [user,setUser] = useState({})
+    const [loading,setLoading] = useState(true);
+    const {userId} = useParams();
+    const {addToast} = useToasts()
+    const navigate = useNavigate();
+    const auth = useAuth();
+    console.log(userId);
+    useEffect(()=>{
+        const getUser = async()=>{
+            const response = await fetchUserProfile();
+            console.log(response);
+            if(response.success){
+                setUser(response.data.user)
+            }
+            else{
+                addToast(response.message,{
+                    appearance:'error'
+                })
+                return navigate('/');
+            }
+            setLoading(false);
+        }
+        getUser();
+    },[userId,navigate,addToast])
+    if(loading){
+        return <Loader />
+    }
+    const checkIfUserIsAFriend = () => {
+        const friends = auth.user.friends;
+        const friendIds = friends.map((friend)=>(friend.to_user._id));
+        const index = friendIds.indexOf(userId);
+        if(index!==-1){
+            return true
+        }
+        else{
+            return false;
+        }
+    }
     return(
         <div className={styles.settings}>
             <div className={styles.imgContainer}>
@@ -15,7 +56,7 @@ const UserProfile = () => {
                 </div>
                 
                 <div className={styles.fieldValue}>
-                    {user?.email}
+                    {user.email}
                 </div>
             </div>
             <div className={styles.field}>
@@ -23,14 +64,19 @@ const UserProfile = () => {
                     Name
                 </div>
                 <div className={styles.fieldValue}>
-                    {user?.name}
+                    {user.name}
                 </div>
                
             </div>
 
             <div className={styles.btnGrp}>
-                <button className={`button ${styles.saveBtn}`}>Add Friend</button>
-                <button className={`button ${styles.saveBtn}`}>Remove Friend</button>
+                {checkIfUserIsAFriend()?
+                    <button className={`button ${styles.saveBtn}`}>Remove Friend</button>
+                    :
+                    <button className={`button ${styles.saveBtn}`  }>Add Friend</button>
+                }
+                
+                
             </div>
         </div>
     )
