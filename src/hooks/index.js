@@ -83,12 +83,23 @@ export const useProvideAuth = () =>{
             };
           }
     }
+    const updateUserFriends = (addFriend,friend)=>{
+        if(addFriend){
+            setUser({
+                ...user,
+                friends:[...user.friends,friend],
+            })
+            return
+        }
+
+    }
     return{
         user,
         loading,
         login,
         logout,
         signup,
-        updateUser
+        updateUser,
+        updateUserFriends
     }
 }

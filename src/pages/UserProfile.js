@@ -4,11 +4,12 @@ import { useAuth } from '../hooks/index';
 import { useState, useEffect } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
-import { fetchUserProfile } from '../api/index';
+import { fetchUserProfile, addFriend } from '../api/index';
 import { Loader } from '../components';
 const UserProfile = () => {
     const [user,setUser] = useState({})
     const [loading,setLoading] = useState(true);
+    const [requestInProgress,setRequestInProgress] = useState(false);
     const {userId} = useParams();
     const {addToast} = useToasts()
     const navigate = useNavigate();
@@ -45,6 +46,23 @@ const UserProfile = () => {
             return false;
         }
     }
+    const handleAddFriendClick = async() =>{
+        setRequestInProgress(true);
+        const response =  await addFriend(userId);
+        if(response.success){
+            const {frienship}=response.data;
+            auth.updateUserFriends(true,frienship);
+            addToast("Friend added successfully",{
+                appearance:'success'
+            })
+        }
+        else{
+            addToast(response.message,{
+                appearance:'error'
+            })
+        }
+        setRequestInProgress(false);
+    } 
     return(
         <div className={styles.settings}>
             <div className={styles.imgContainer}>
@@ -73,7 +91,9 @@ const UserProfile = () => {
                 {checkIfUserIsAFriend()?
                     <button className={`button ${styles.saveBtn}`}>Remove Friend</button>
                     :
-                    <button className={`button ${styles.saveBtn}`  }>Add Friend</button>
+                    <button className={`button ${styles.saveBtn}`} onClick={handleAddFriendClick} disabled={requestInProgress} >
+                        {requestInProgress?"Adding Friend":"Add Friend"}
+                    </button>
                 }
                 
                 
