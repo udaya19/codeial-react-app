@@ -1,6 +1,6 @@
 import styles from '../styles/home.module.css';
 import PropTypes from 'prop-types';
-import { Comments } from '../components';
+import { Comments, CreatePost } from '../components';
 import { useState , useEffect} from 'react';
 import { getPosts } from '../api';
 import {Loader} from '../components';
@@ -32,6 +32,7 @@ const Home = () =>{
 
         <div className={styles.home}>
           <div className={styles.postsList}>
+              <CreatePost />
               {posts.map((post)=>(
                   <div className={styles.postWrapper} key={`post=${post._id}`} >
                   <div className={styles.postHeader}>
