@@ -1,31 +1,16 @@
 import styles from '../styles/home.module.css';
 import PropTypes from 'prop-types';
 import { Comments, CreatePost } from '../components';
-import { useState , useEffect} from 'react';
-import { getPosts } from '../api';
+// import { useState , useEffect} from 'react';
+// import { getPosts } from '../api';
 import {Loader} from '../components';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/index';
+import { useAuth, usePosts } from '../hooks/index';
 import FriendList from '../components/FriendList';
 const Home = () =>{
-    const [posts,setPosts] = useState([]); 
-  const [loading,setLoading] = useState(true); 
   const auth = useAuth();
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await getPosts();
-
-      if (response.success) {
-        setPosts(response.data.posts);
-      }
-
-      setLoading(false);
-    };
-
-    fetchPosts();
-  }, []);
-
-  if (loading) {
+  const posts = usePosts();
+  if (posts.loading) {
     return <Loader />;
   }
     return (
@@ -33,7 +18,7 @@ const Home = () =>{
         <div className={styles.home}>
           <div className={styles.postsList}>
               <CreatePost />
-              {posts.map((post)=>(
+              {posts.data.map((post)=>(
                   <div className={styles.postWrapper} key={`post=${post._id}`} >
                   <div className={styles.postHeader}>
                     <div className={styles.postAvatar}>
