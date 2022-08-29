@@ -92,3 +92,11 @@ export const addFriend = (userId)=>{
 
   })
 }
+
+export const addPost = (content)=>{
+  return customFetch(API_URLS.createPost(),{
+    method:'POST',
+    body:content
+
+  })
+}
